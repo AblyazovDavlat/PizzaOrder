@@ -20,9 +20,9 @@ public class EmplClient {
     {
         System.out.println("This is Employee client");
         System.out.println("1. Get Pizza menu");
-        System.out.println("2. Make a pizza order");
-        System.out.println("3. Check status order");
-        System.out.println("3. Check status order");
+        System.out.println("2. Add new pizza in menu");
+        System.out.println("3. Remove new pizza from menu");
+        System.out.println("3. Change order status");
     }
     
     public static void main(String[] args) 
@@ -48,20 +48,40 @@ public class EmplClient {
                 case 2:
                 {
                     in.nextLine();
-                    System.out.println("Enter date as <Day>'<Month>");
-                    in.nextLine();
+                    System.out.println("Enter name for Pizza");
+                    String name = in.nextLine();
+                    System.out.println("Enter cost for Pizza");
+                    String cost = in.nextLine();
+                    int costInt = Integer.valueOf(cost);
+                    System.out.println("Enter description for Pizza");
+                    String description = in.nextLine();
+                    System.out.println(service.addNewPizza(name, costInt, description));
+                    System.out.println("Press anykey to continue...");
+                    in.nextLine();                    
                     break;
                 }
                 case 3:
                 {
                     in.nextLine();
-                    System.out.println("Enter number your order");
-                    String numberOrder = in.nextLine();
-                    System.out.println(service.checkOrderStatus(Integer.valueOf(numberOrder)));
+                    System.out.println("Enter ID ");
+                    String idPizza = in.nextLine();
+                    System.out.println(service.removePizza(Integer.valueOf(idPizza)));
                     System.out.println("Press anykey to continue...");
                     in.nextLine();
                     break;
                    
+                }
+                case 4:
+                {
+                    in.nextLine();
+                    System.out.println("Enter number of order");
+                    String numOrder = in.nextLine();
+                    System.out.println("Enter new status for order");
+                    String status = in.nextLine();
+                    System.out.println(service.changeOrderStatus(Integer.valueOf(numOrder), status));
+                    System.out.println("Press anykey to continue...");
+                    in.nextLine();
+                    break;
                 }
                 default:
                 {

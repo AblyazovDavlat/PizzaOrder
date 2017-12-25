@@ -5,6 +5,7 @@
  */
 package visitorclient;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import myws.*;
 
@@ -45,7 +46,18 @@ public class VisitorClient {
                 case 2:
                 {
                     in.nextLine();
-                    System.out.println("Enter date as <Day>'<Month>");
+                    System.out.println("Enter id of pizza - amount of pizza");
+                    System.out.println("To make an order -Enter Go!");
+                    ArrayList<Integer> ids = new ArrayList<Integer>();
+                    ArrayList<Integer> amounts = new ArrayList<Integer>();
+                    int i = 0;
+                    while(i<2){
+                        ids.add(in.nextInt());
+                        amounts.add(in.nextInt());
+                        i++;
+                    }
+                    System.out.println(service.addNewOrder(ids, amounts));
+                    System.out.println("Press anykey to continue...");
                     in.nextLine();
                     break;
                 }
