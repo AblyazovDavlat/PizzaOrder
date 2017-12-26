@@ -5,14 +5,14 @@
  */
 package MyWS;
 
-import beans.SessionBean;
-import beans.StorageBean;
 import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
+import stuff.Order;
+import stuff.Pizza;
 
 /**
  *
@@ -21,65 +21,102 @@ import javax.ejb.Stateless;
 @WebService(serviceName = "MyWebService")
 @Stateless()
 public class MyWebService {
+    
+    public ArrayList<Pizza> pizzaList = new ArrayList();
+    public ArrayList<Order> orderList = new ArrayList();
 
-    public static StorageBean myStorage;
-    
-    public MyWebService()
-    {
-        //serviceList = new ArrayList();
-        //schedule = new Timetable();
-        myStorage = new StorageBean();
-    }
-    
-    public static int findPizzaInServiceList(int _ID)
-    {
-        for (int i = 0; i < myStorage.pizzaList.size(); i++)
-        {
-            if (myStorage.pizzaList.get(i).getId() == _ID)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-    
-    @EJB
-    private SessionBean sessionBean;
     
     @WebMethod
     public int addNewPizza(String name, int cost, String description)
     {
-        return sessionBean.addNewPizza(name, cost, description);
+        Pizza newPizza = new Pizza(name, cost, description);
+        pizzaList.add(newPizza);
+        return newPizza.getId();
     }
     
     @WebMethod
     public String removePizza(int idPizza)
     {
-        return sessionBean.removePizza(idPizza);
+                for (int i = 0; i <  pizzaList.size(); i++)
+        {
+            if ( pizzaList.get(i).getId() == idPizza)
+            {
+                 pizzaList.remove(i);
+                return "Pizza witn ID: " + i + " remove from menu";
+            }
+        }
+        return "ID doesnt exists";
     }
     
     @WebMethod
     public String getPizzaList ()
     {
-        return sessionBean.getPizzaList();
+        String tmpPizzaList = new String();
+        
+        if (pizzaList.isEmpty())
+        {
+            return "EMPTY";
+        }
+        
+        for (int i = 0; i < pizzaList.size(); i++)
+        {
+            tmpPizzaList = tmpPizzaList.concat(" | Menu # " + i + ": ");
+            tmpPizzaList = tmpPizzaList.concat("ID = " + String.valueOf(pizzaList.get(i).getId()) + ", ");
+            tmpPizzaList = tmpPizzaList.concat("name = " + String.valueOf(pizzaList.get(i).getName()) + ", ");
+            tmpPizzaList = tmpPizzaList.concat("cost = " + String.valueOf(pizzaList.get(i).getCost()) + ", ");
+            tmpPizzaList = tmpPizzaList.concat("description = " + String.valueOf(pizzaList.get(i).getDescription()));
+        }
+        return tmpPizzaList;
     }
     
     @WebMethod
     public String checkOrderStatus(int number)
     {
-        return sessionBean.checkOrderStatus(number);
+        for (int i = 0; i <  pizzaList.size(); i++)
+        {
+            if ( orderList.get(i).getNumber() == number){
+                return "Order status is: " +  orderList.get(i).getStatus() + "for order with number " + i;
+            }
+        }
+        return "This order doesnt exits";
     }
     
     @WebMethod
     public String changeOrderStatus(int number, String status)
     {
-        return sessionBean.changeOrderStatus(number, status);
+        for (int i = 0; i <  pizzaList.size(); i++)
+        {
+            if ( orderList.get(i).getNumber() == number){
+                 orderList.get(i).setStatus(status);
+                return "Status is changed to " + status + "for order with number " + i;
+            }
+        }
+        return "This order doesnt exits";
     }
     
     @WebMethod
     public String addNewOrder(ArrayList<Integer> pizzaInOrder, ArrayList<Integer> quanInOrder)
     {
-        return sessionBean.addNewOrder(pizzaInOrder, quanInOrder);
+        Order newOrder = new Order(pizzaInOrder, quanInOrder, "Added");
+        orderList.add(newOrder);
+        String dataOut;
+        int sum = 0;
+        int idPizzaInOrder = -1;
+        int costPizzaInOrder = -1;
+        
+        for (int i = 0; i < pizzaInOrder.size(); i++){
+            idPizzaInOrder = pizzaInOrder.get(i);
+            for (int j = 0; j <  pizzaList.size(); j++)
+            {
+                if ( pizzaList.get(i).getId() == idPizzaInOrder)
+                {
+                    costPizzaInOrder =  pizzaList.get(i).getCost();
+                    sum += costPizzaInOrder * quanInOrder.get(i);
+                }
+            }
+        }
+        dataOut = "Number order is " + newOrder.getNumber() + ". Order for an amount " + sum;
+        return dataOut;
     }
     
     

@@ -51,7 +51,7 @@ public class VisitorClient {
                     ArrayList<Integer> ids = new ArrayList<Integer>();
                     ArrayList<Integer> amounts = new ArrayList<Integer>();
                     int i = 0;
-                    while(i<2){
+                    while(i<1){
                         ids.add(in.nextInt());
                         amounts.add(in.nextInt());
                         i++;

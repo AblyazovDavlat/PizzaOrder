@@ -22,7 +22,7 @@ public class EmplClient {
         System.out.println("1. Get Pizza menu");
         System.out.println("2. Add new pizza in menu");
         System.out.println("3. Remove new pizza from menu");
-        System.out.println("3. Change order status");
+        System.out.println("4. Change order status");
     }
     
     public static void main(String[] args) 
